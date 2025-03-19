@@ -32,19 +32,20 @@ def process_file(input_path, output_path):
 def main():
     input_dir = Path('txt')
     output_dir = Path('output')
-    processed_files = 0  # 新增计数器
+    processed_files = 0
 
     for root, _, files in os.walk(input_dir):
         for file in files:
-            if file.endswith('.txt'):
+            # 修改文件类型判断，同时支持.md和.txt
+            if file.endswith(('.txt', '.md')):
                 src_path = Path(root) / file
                 rel_path = src_path.relative_to(input_dir)
-                clean_name = f"{rel_path.stem}_clean{rel_path.suffix}"
+                # 修改输出文件后缀为.txt
+                clean_name = f"{rel_path.stem}_clean.txt"  # 固定后缀为txt
                 
-                # 添加处理进度提示
                 print(f"正在清理：{src_path}")
                 process_file(src_path, output_dir / rel_path.with_name(clean_name))
-                processed_files += 1  # 更新计数器
+                processed_files += 1
 
     # 添加完成提示
     if processed_files > 0:
